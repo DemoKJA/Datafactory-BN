@@ -1,0 +1,9 @@
+{
+	"name": "adf-data-ai-dev",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "22de06d9-024c-47ab-bc86-d7036fb57c84",
+		"tenantId": "6c637512-c417-4e78-9d62-b61258e4b619"
+	}
+}
