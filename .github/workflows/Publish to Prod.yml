@@ -29,7 +29,7 @@ jobs:
         subscriptionId: ${{ secrets.SUB }}
         resourceGroupName: rg-data-ai-eastus2-prod
         template: ./adf-data-ai-dev/ARMTemplateForFactory.json
-        parameters: ./adf-data-ai-dev/PRODARMTemplateParametersForFactory.json.json
+        parameters: ./adf-data-ai-dev/PRODARMTemplateParametersForFactory.json
 
       # output containerName variable from template
     - run: echo ${{ steps.deploy.outputs.containerName }}
