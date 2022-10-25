@@ -1,0 +1,35 @@
+name: Deploy to Prod
+
+on:
+  push:
+    branches: adf_publish_prod
+  workflow_dispatch:
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+    - uses: actions/checkout@v2
+      with:
+        ref: adf_publish_prod
+  
+    - name: ls
+      run: ls ./ad
+
+      # Log into Azure
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZCREDENTIALS }}
+
+      # Deploy ARM template
+    - name: Run ARM deploy
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.SUB }}
+        resourceGroupName: rg-data-ai-eastus2-prod
+        template: ./adf-data-ai-dev/ARMTemplateForFactory.json
+        parameters: ./adf-data-ai-dev/PRODARMTemplateParametersForFactory.json.json
+
+      # output containerName variable from template
+    - run: echo ${{ steps.deploy.outputs.containerName }}
