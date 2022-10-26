@@ -124,16 +124,18 @@
 		"parameters": {
 			"ContainerFileArray": {
 				"type": "array"
+			},
+			"FolderNumber": {
+				"type": "string"
 			}
 		},
 		"variables": {
-			"FolderNumber": {
-				"type": "String",
-				"defaultValue": "1"
-			},
 			"i": {
 				"type": "String",
 				"defaultValue": "1"
+			},
+			"FileNumber": {
+				"type": "String"
 			}
 		},
 		"annotations": []
