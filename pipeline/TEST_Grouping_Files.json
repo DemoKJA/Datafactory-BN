@@ -52,7 +52,7 @@
 				"typeProperties": {
 					"variableName": "TESTVar",
 					"value": {
-						"value": "@activity('Get list of file from container').output.childitems",
+						"value": "@activity('Get list of file from container').output.childItems",
 						"type": "Expression"
 					}
 				}
