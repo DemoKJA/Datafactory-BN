@@ -56,6 +56,26 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "test",
+					"value": {
+						"value": "@length(json(variables('ContainerFileArrayLength')).value)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -73,6 +93,9 @@
 			"GISFolderName": {
 				"type": "String",
 				"defaultValue": "JustATest"
+			},
+			"test": {
+				"type": "String"
 			}
 		},
 		"annotations": []
