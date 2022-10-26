@@ -20,8 +20,8 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "newyork",
-							"directory": "*",
-							"file": "FileCount.csv"
+							"directory": "FileCount",
+							"file": "*"
 						}
 					},
 					"enableLogging": false,
