@@ -190,6 +190,9 @@
 			},
 			"FileCountRemaining": {
 				"type": "string"
+			},
+			"TotalFileCount": {
+				"type": "string"
 			}
 		},
 		"variables": {
@@ -202,6 +205,9 @@
 				"defaultValue": "1"
 			},
 			"FileCountIncremental": {
+				"type": "String"
+			},
+			"TotalFileCount": {
 				"type": "String"
 			}
 		},
