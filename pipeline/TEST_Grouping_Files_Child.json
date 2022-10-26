@@ -7,7 +7,7 @@
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "Initialize FileNumber",
+						"activity": "Initialize FileCountIncremental",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -168,19 +168,6 @@
 				}
 			},
 			{
-				"name": "Initialize FileNumber",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "FileNumber",
-					"value": {
-						"value": "@pipeline().parameters.FileCountIncremental",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Write Count To Storage",
 				"type": "WebActivity",
 				"dependsOn": [
@@ -214,6 +201,19 @@
 					"authentication": {
 						"type": "MSI",
 						"resource": "https://storage.azure.com"
+					}
+				}
+			},
+			{
+				"name": "Initialize FileCountIncremental",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileNumber",
+					"value": {
+						"value": "@pipeline().parameters.FileCountIncremental",
+						"type": "Expression"
 					}
 				}
 			}
