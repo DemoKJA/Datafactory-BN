@@ -91,16 +91,30 @@
 							"typeProperties": {
 								"variableName": "i",
 								"value": {
-									"value": "@string(add(int(variables('FolderNumber')),20))",
+									"value": "@string(add(int(variables('FolderNumber')),1))",
 									"type": "Expression"
 								}
 							}
 						},
 						{
-							"name": "Set variable2",
+							"name": "Set FolderNumber",
 							"type": "SetVariable",
-							"dependsOn": [],
-							"userProperties": []
+							"dependsOn": [
+								{
+									"activity": "Set i",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FolderNumber",
+								"value": {
+									"value": "@variables('i')",
+									"type": "Expression"
+								}
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
