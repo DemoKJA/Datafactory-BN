@@ -38,41 +38,24 @@
 				}
 			},
 			{
-				"name": "Until 20 per file",
-				"type": "Until",
-				"dependsOn": [],
+				"name": "ForEach file assign to folder",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get list of file from container",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
-					"expression": {
-						"value": "@greaterOrEquals(variables('FileCount'),20)",
+					"items": {
+						"value": "@activity('Get list of file from container').output.childItems",
 						"type": "Expression"
 					},
-					"activities": [
-						{
-							"name": "Copy data1",
-							"type": "Copy",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"enableStaging": false
-							}
-						}
-					],
-					"timeout": "0.12:00:00"
+					"isSequential": true
 				}
-			},
-			{
-				"name": "ForEach1",
-				"type": "ForEach",
-				"dependsOn": [],
-				"userProperties": []
 			}
 		],
 		"variables": {
