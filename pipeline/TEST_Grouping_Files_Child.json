@@ -187,7 +187,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://stdataaiuserdev.blob.core.windows.net/columbus/FileCount.csv?resource=file",
+					"url": "https://stdataaiuserdev.blob.core.windows.net/columbus/FileCount/FileCount.csv?resource=file",
 					"method": "PUT",
 					"headers": {
 						"x-ms-version": "2019-07-07",
