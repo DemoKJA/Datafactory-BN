@@ -1,0 +1,10 @@
+{
+	"name": "LS_ABLB_USER",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://stdataaiuserdev.dfs.core.windows.net"
+		}
+	}
+}
