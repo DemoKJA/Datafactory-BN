@@ -210,7 +210,7 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "FileNumber",
+					"variableName": "FileCountIncremental",
 					"value": {
 						"value": "@pipeline().parameters.FileCountIncremental",
 						"type": "Expression"
