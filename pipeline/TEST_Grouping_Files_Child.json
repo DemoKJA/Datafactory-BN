@@ -75,6 +75,29 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "Set i",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Copy into folder",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "i",
+								"value": ""
+							}
+						},
+						{
+							"name": "Set variable2",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": []
 						}
 					],
 					"timeout": "0.12:00:00"
@@ -82,25 +105,18 @@
 			}
 		],
 		"parameters": {
-			"filename": {
-				"type": "string"
+			"ContainerFileArray": {
+				"type": "array"
 			}
 		},
 		"variables": {
-			"FileCount": {
-				"type": "String",
-				"defaultValue": "1"
-			},
 			"FolderNumber": {
 				"type": "String",
 				"defaultValue": "1"
 			},
-			"TESTVar": {
-				"type": "String"
-			},
-			"GISFolderName": {
+			"i": {
 				"type": "String",
-				"defaultValue": "JustATest"
+				"defaultValue": "1"
 			}
 		},
 		"annotations": []
