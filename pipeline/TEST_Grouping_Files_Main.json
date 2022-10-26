@@ -72,12 +72,6 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
-					},
-					{
-						"activity": "Set FileCountRemaining",
-						"dependencyConditions": [
-							"Succeeded"
-						]
 					}
 				],
 				"userProperties": [],
@@ -228,32 +222,6 @@
 						}
 					],
 					"timeout": "0.12:00:00"
-				}
-			},
-			{
-				"name": "Set FileCountRemaining",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get list of file from container",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "Delete FileCount file pre",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "FileCountRemaining",
-					"value": {
-						"value": "@string(length(activity('Get list of file from container').output.childItems))",
-						"type": "Expression"
-					}
 				}
 			},
 			{
