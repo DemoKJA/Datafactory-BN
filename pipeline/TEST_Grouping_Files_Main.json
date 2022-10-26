@@ -188,9 +188,6 @@
 				"type": "String",
 				"defaultValue": "JustATest"
 			},
-			"FileName": {
-				"type": "String"
-			},
 			"i": {
 				"type": "String",
 				"defaultValue": "1"
