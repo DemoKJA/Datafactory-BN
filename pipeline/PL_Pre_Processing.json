@@ -66,7 +66,12 @@
 									"referenceName": "DS_ADLS_USER_CLEANSED",
 									"type": "DatasetReference",
 									"parameters": {
-										"container": "anchorage"
+										"container": "anchorage",
+										"directory": "CleansedRawVideo",
+										"filename": {
+											"value": "@replace(item().name,'-','')",
+											"type": "Expression"
+										}
 									}
 								}
 							]
