@@ -125,7 +125,13 @@
 									"referenceName": "TEST_Grouping_Files_Child",
 									"type": "PipelineReference"
 								},
-								"waitOnCompletion": true
+								"waitOnCompletion": true,
+								"parameters": {
+									"ContainerFileArray": {
+										"value": "@variables('ContainerFileArray')",
+										"type": "Expression"
+									}
+								}
 							}
 						},
 						{
