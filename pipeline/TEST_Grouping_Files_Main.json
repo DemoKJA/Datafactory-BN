@@ -72,7 +72,7 @@
 				"typeProperties": {
 					"variableName": "TotalFileCount",
 					"value": {
-						"value": "@string(length(variables('ContainerFileArray')))",
+						"value": "@string(length(activity('Get list of file from container').output.childItems))",
 						"type": "Expression"
 					}
 				}
@@ -92,7 +92,7 @@
 				"typeProperties": {
 					"variableName": "FileName",
 					"value": {
-						"value": "@string(variables('ContainerFileArray')[0].name)",
+						"value": "@string(activity('Get list of file from container').output.childItems[0].name)",
 						"type": "Expression"
 					}
 				}
