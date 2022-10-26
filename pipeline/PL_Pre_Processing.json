@@ -74,7 +74,7 @@
 										"container": "columbus",
 										"directoy": "CleansedNameVideoFile",
 										"filename": {
-											"value": "@replace(item().name,'-','')",
+											"value": "@replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(item().name,' ',''),'!',''),'@',''),'#',''),'$',''),'%',''),'^',''),'&',''),'*',''),'(',''),')','')",
 											"type": "Expression"
 										}
 									}
