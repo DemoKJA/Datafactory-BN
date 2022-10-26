@@ -187,6 +187,9 @@
 			},
 			"FileCountIncremental": {
 				"type": "string"
+			},
+			"FileCountRemaining": {
+				"type": "string"
 			}
 		},
 		"variables": {
