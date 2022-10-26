@@ -80,7 +80,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greaterOrEquals(add(int(variables('FileCountIncremental')),1), int(variables('TotalFileCount')))\n\n\n",
+						"value": "@greater(add(int(variables('FileCountIncremental')),1), int(variables('TotalFileCount')))\n\n\n",
 						"type": "Expression"
 					},
 					"activities": [
