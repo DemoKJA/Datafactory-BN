@@ -91,7 +91,7 @@
 							"typeProperties": {
 								"variableName": "i",
 								"value": {
-									"value": "@string(add(int(variables('FolderNumber')),1))",
+									"value": "@string(add(int(variables('FileNumber')),1))",
 									"type": "Expression"
 								}
 							}
