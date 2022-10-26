@@ -20,7 +20,8 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "anchorage",
-							"directory": "*"
+							"directory": "*",
+							"filename": "*"
 						}
 					},
 					"fieldList": [],
