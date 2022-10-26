@@ -78,31 +78,11 @@
 				}
 			},
 			{
-				"name": "Set FileName",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Set TotalFileCount",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "FileName",
-					"value": {
-						"value": "@string(activity('Get list of file from container').output.childItems[0].name)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Until run out of files in container",
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "Set FileName",
+						"activity": "Set TotalFileCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
