@@ -46,7 +46,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "columbus",
-										"directoy": "TESTGrouping",
+										"directory": "TESTGrouping",
 										"filename": {
 											"value": "@pipeline().parameters.filename",
 											"type": "Expression"
@@ -60,7 +60,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "columbus",
-										"directoy": {
+										"directory": {
 											"value": "@concat('TESTGrouping/Group',variables('FolderNumber'))",
 											"type": "Expression"
 										},
