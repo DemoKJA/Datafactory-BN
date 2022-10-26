@@ -247,9 +247,6 @@
 			"FileCountIncremental": {
 				"type": "String"
 			},
-			"TotalFileCount": {
-				"type": "String"
-			},
 			"j": {
 				"type": "String",
 				"defaultValue": "1"
