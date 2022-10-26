@@ -59,7 +59,10 @@
 									"parameters": {
 										"container": "columbus",
 										"directoy": "RawVideoFiles",
-										"filename": "*"
+										"filename": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
 									}
 								}
 							],
