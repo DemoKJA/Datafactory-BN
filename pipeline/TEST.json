@@ -81,7 +81,12 @@
 				"outputs": [
 					{
 						"referenceName": "DS_ADLS_USER_CSV",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "columbus",
+							"directory": "TESTFOlder",
+							"file": "IncrementalValue.csv"
+						}
 					}
 				]
 			}
