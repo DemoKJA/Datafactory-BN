@@ -38,6 +38,12 @@
 				}
 			}
 		],
+		"variables": {
+			"FileCount": {
+				"type": "String",
+				"defaultValue": "0"
+			}
+		},
 		"annotations": []
 	}
 }
