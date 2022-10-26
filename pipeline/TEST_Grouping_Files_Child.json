@@ -72,7 +72,7 @@
 									"parameters": {
 										"container": "columbus",
 										"directory": {
-											"value": "@concat('TESTGrouping/Group',variables('FolderNumber'))",
+											"value": "@concat('TESTGrouping/Group',pipeline().parameters.FolderNumber)",
 											"type": "Expression"
 										},
 										"filename": {
