@@ -130,6 +130,10 @@
 									"ContainerFileArray": {
 										"value": "@variables('ContainerFileArray')",
 										"type": "Expression"
+									},
+									"FolderNumber": {
+										"value": "@variables('FolderNumber')",
+										"type": "Expression"
 									}
 								}
 							}
