@@ -195,7 +195,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@variables('TEST')",
+						"value": "@variables('FileCountIncremental')",
 						"type": "Expression"
 					},
 					"authentication": {
