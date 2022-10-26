@@ -187,7 +187,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://stdataaiuserdev.blob.core.windows.net/@pipeline().parameters.ContainerName/FileCount/FileCount.csv?resource=file",
+					"url": {
+						"value": "@replace('https://stdataaiuserdev.blob.core.windows.net/CONTAINER_NAME/FileCount/FileCount.csv?resource=file','CONTAINER_NAME',pipeline().parameters.ContainerName)",
+						"type": "Expression"
+					},
 					"method": "PUT",
 					"headers": {
 						"x-ms-version": "2019-07-07",
