@@ -59,7 +59,7 @@
 										"container": "columbus",
 										"directory": "TESTGrouping",
 										"filename": {
-											"value": "@pipeline().parameters.filename",
+											"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
 											"type": "Expression"
 										}
 									}
@@ -76,7 +76,7 @@
 											"type": "Expression"
 										},
 										"filename": {
-											"value": "@pipeline().parameters.filename",
+											"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
 											"type": "Expression"
 										}
 									}
