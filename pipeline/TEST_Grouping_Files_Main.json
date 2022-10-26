@@ -117,31 +117,11 @@
 							}
 						},
 						{
-							"name": "Increment i",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "Lookup1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "i",
-								"value": {
-									"value": "@string(add(int(variables('FileCountIncremental')),20)) ",
-									"type": "Expression"
-								}
-							}
-						},
-						{
 							"name": "set FileCountIncremental",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Increment i",
+									"activity": "Pull FileCountIncremental",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -197,7 +177,7 @@
 							}
 						},
 						{
-							"name": "Lookup1",
+							"name": "Pull FileCountIncremental",
 							"type": "Lookup",
 							"dependsOn": [
 								{
@@ -214,7 +194,25 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": []
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"dataset": {
+									"referenceName": "DS_ADLS_USER_CSV",
+									"type": "DatasetReference"
+								},
+								"firstRowOnly": false
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
