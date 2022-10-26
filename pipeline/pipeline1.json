@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "DS_ADLS_USER",
+						"referenceName": "DS_ADLS_USER_CLEANSED",
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "anchorage",
