@@ -6,6 +6,14 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-data-ai-dev"
+		},
+		"LS_ADLS_ARCHIVE_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stdataaiarchivedev.dfs.core.windows.net"
+		},
+		"LS_ADLS_USER_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stdataaiuserdev.dfs.core.windows.net"
 		}
 	},
 	"variables": {
@@ -13,18 +21,551 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/LS_ADLS_ARCHIVE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADLS_ARCHIVE_properties_typeProperties_url')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADLS_USER')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADLS_USER_properties_typeProperties_url')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_ARCHIVE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_ARCHIVE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_ARCHIVE')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_USER_BINARY')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_USER",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"directory": {
+						"type": "string"
+					},
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().directory",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_USER')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_USER_CSV')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_USER",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"directory": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@dataset().directory",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_USER')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Grouping_Files_Child')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Until Folder is full",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "Initialize FileCountIncremental",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@or(greater(int(variables('FileNumber')),3),greater(add(int(variables('FileCountIncremental')),1),int(pipeline().parameters.TotalFileCount)))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy into folder",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true
+											},
+											"formatSettings": {
+												"type": "BinaryReadSettings"
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_ADLS_USER_BINARY",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "@pipeline().parameters.ContainerName",
+												"directory": "TESTGrouping",
+												"filename": {
+													"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_USER_BINARY",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "@pipeline().parameters.ContainerName",
+												"directory": {
+													"value": "@concat('TESTGrouping/Group',pipeline().parameters.FolderNumber)",
+													"type": "Expression"
+												},
+												"filename": {
+													"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "Set i",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Copy into folder",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "i",
+										"value": {
+											"value": "@string(add(int(variables('FileNumber')),1))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set FileNumber",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set i",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileNumber",
+										"value": {
+											"value": "@variables('i')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set j",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Copy into folder",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "j",
+										"value": {
+											"value": "@string(add(int(variables('FileCountIncremental')),1))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set FileCountIncremental",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set j",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileCountIncremental",
+										"value": {
+											"value": "@variables('j')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"timeout": "0.12:00:00"
+						}
+					},
+					{
+						"name": "Write Count To Storage",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Until Folder is full",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@replace('https://stdataaiuserdev.blob.core.windows.net/CONTAINER_NAME/FileCount/FileCount.csv?resource=file','CONTAINER_NAME',pipeline().parameters.ContainerName)",
+								"type": "Expression"
+							},
+							"method": "PUT",
+							"headers": {
+								"x-ms-version": "2019-07-07",
+								"x-ms-blob-type": "BlockBlob",
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "@variables('FileCountIncremental')",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://storage.azure.com"
+							}
+						}
+					},
+					{
+						"name": "Initialize FileCountIncremental",
+						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 2
+							"variableName": "FileCountIncremental",
+							"value": {
+								"value": "@pipeline().parameters.FileCountIncremental",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"ContainerFileArray": {
+						"type": "array"
+					},
+					"FolderNumber": {
+						"type": "string"
+					},
+					"FileCountIncremental": {
+						"type": "string"
+					},
+					"TotalFileCount": {
+						"type": "string"
+					},
+					"ContainerName": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"i": {
+						"type": "String",
+						"defaultValue": "1"
+					},
+					"FileNumber": {
+						"type": "String",
+						"defaultValue": "1"
+					},
+					"FileCountIncremental": {
+						"type": "String"
+					},
+					"j": {
+						"type": "String",
+						"defaultValue": "1"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_USER_BINARY')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Pre_Processing')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach Child Item",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Filter out base file",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Filter out base file').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "Cleanse file names",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true
+											},
+											"formatSettings": {
+												"type": "BinaryReadSettings"
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_ADLS_USER_BINARY",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "columbus",
+												"directory": "RawVideoFiles",
+												"filename": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_USER_BINARY",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "columbus",
+												"directory": "CleansedNameVideoFile",
+												"filename": {
+													"value": "@replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(item().name,' ',''),'!',''),'@',''),'#',''),'$',''),'%',''),'^',''),'&',''),'*',''),'(',''),')','')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Get list of file from container",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_ADLS_USER_BINARY",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": "columbus",
+									"directory": "RawVideoFiles",
+									"filename": "*"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Filter out base file",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "Get list of file from container",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get list of file from container').output.childItems",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@not(equals(item().name,'Please place raw video files here'))",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -34,7 +575,348 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_USER_BINARY')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Grouping_Files_Main')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get list of file from container",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_ADLS_USER_BINARY",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": {
+										"value": "@pipeline().parameters.ContainerName",
+										"type": "Expression"
+									},
+									"directory": "TESTGrouping",
+									"filename": "*"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Set TotalFileCount",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get list of file from container",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Delete FileCount file pre",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "TotalFileCount",
+							"value": {
+								"value": "@string(length(activity('Get list of file from container').output.childItems))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Until run out of files in container",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "Set TotalFileCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(add(int(variables('FileCountIncremental')),1), int(variables('TotalFileCount')))\n\n\n",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Execute Grouping Child",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Grouping_Files_Child",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ContainerFileArray": {
+												"value": "@activity('Get list of file from container').output.childItems",
+												"type": "Expression"
+											},
+											"FolderNumber": {
+												"value": "@variables('FolderNumber')",
+												"type": "Expression"
+											},
+											"FileCountIncremental": {
+												"value": "@variables('FileCountIncremental')",
+												"type": "Expression"
+											},
+											"TotalFileCount": {
+												"value": "@variables('TotalFileCount')",
+												"type": "Expression"
+											},
+											"ContainerName": {
+												"value": "@pipeline().parameters.ContainerName",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								{
+									"name": "set FileCountIncremental",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Pull FileCountIncremental",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileCountIncremental",
+										"value": {
+											"value": "@activity('Pull FileCountIncremental').output.value[0].Prop_0",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Increment i",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Execute Grouping Child",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "i",
+										"value": {
+											"value": "@string(add(int(variables('FolderNumber')),1))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "set FolderNumber",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Increment i",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FolderNumber",
+										"value": {
+											"value": "@variables('i')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Pull FileCountIncremental",
+									"type": "Lookup",
+									"dependsOn": [
+										{
+											"activity": "Execute Grouping Child",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"wildcardFolderPath": "FileCount",
+												"wildcardFileName": "*",
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"dataset": {
+											"referenceName": "DS_ADLS_USER_CSV",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "@pipeline().parameters.ContainerName",
+												"directory": "FileCount"
+											}
+										},
+										"firstRowOnly": false
+									}
+								}
+							],
+							"timeout": "0.12:00:00"
+						}
+					},
+					{
+						"name": "Delete FileCount file post",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "Until run out of files in container",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_ADLS_USER_CSV",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": "@pipeline().parameters.ContainerName",
+									"directory": "FileCount"
+								}
+							},
+							"enableLogging": false,
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "Delete FileCount file pre",
+						"type": "Delete",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_ADLS_USER_CSV",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": {
+										"value": "@pipeline().parameters.ContainerName",
+										"type": "Expression"
+									},
+									"directory": "FileCount"
+								}
+							},
+							"enableLogging": false,
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"ContainerName": {
+						"type": "string",
+						"defaultValue": "columbus"
+					}
+				},
+				"variables": {
+					"TotalFileCount": {
+						"type": "String"
+					},
+					"FileCountIncremental": {
+						"type": "String",
+						"defaultValue": "0"
+					},
+					"GISFolderName": {
+						"type": "String",
+						"defaultValue": "JustATest"
+					},
+					"i": {
+						"type": "String",
+						"defaultValue": "1"
+					},
+					"FolderNumber": {
+						"type": "String",
+						"defaultValue": "1"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_USER_BINARY')]",
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_USER_CSV')]",
+				"[concat(variables('factoryId'), '/pipelines/Grouping_Files_Child')]"
+			]
 		}
 	]
 }

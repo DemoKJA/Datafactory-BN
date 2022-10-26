@@ -4,6 +4,12 @@
 	"parameters": {
 		"factoryName": {
 			"value": "adf-data-ai-dev"
+		},
+		"LS_ADLS_ARCHIVE_properties_typeProperties_url": {
+			"value": "https://stdataaiarchivedev.dfs.core.windows.net"
+		},
+		"LS_ADLS_USER_properties_typeProperties_url": {
+			"value": "https://stdataaiuserdev.dfs.core.windows.net"
 		}
 	}
 }
