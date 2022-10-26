@@ -96,6 +96,22 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set FileName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"timeout": "0.12:00:00"
+				}
 			}
 		],
 		"variables": {
