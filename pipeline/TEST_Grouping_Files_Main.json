@@ -110,6 +110,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"expression": {
+						"value": "@greater(variables('FileCountIncremental'),variables('TotalFileCount'))",
+						"type": "Expression"
+					},
 					"timeout": "0.12:00:00"
 				}
 			},
