@@ -1,0 +1,16 @@
+{
+	"name": "DS_ADLS_ARCHIVE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_ARCHIVE",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			}
+		}
+	}
+}
