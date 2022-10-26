@@ -86,6 +86,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "Set FileCountRemaining",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"userProperties": [],
@@ -205,6 +211,26 @@
 					],
 					"timeout": "0.12:00:00"
 				}
+			},
+			{
+				"name": "Set FileCountRemaining",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set ContainerFileArray",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileCountRemaining",
+					"value": {
+						"value": "@string(length(activity('Get list of file from container').output.childItems))",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -233,6 +259,9 @@
 			"j": {
 				"type": "String",
 				"defaultValue": "1"
+			},
+			"FileCountRemaining": {
+				"type": "String"
 			}
 		},
 		"annotations": []
