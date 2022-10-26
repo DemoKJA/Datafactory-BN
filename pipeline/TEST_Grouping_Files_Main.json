@@ -129,9 +129,9 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "",
+								"variableName": "FileCountIncremental",
 								"value": {
-									"value": "@variables('i')",
+									"value": "@activity('Pull FileCountIncremental').output.value[0].Prop_0",
 									"type": "Expression"
 								}
 							}
@@ -201,6 +201,8 @@
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": true,
+										"wildcardFolderPath": "FileCount",
+										"wildcardFileName": "*",
 										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
@@ -209,7 +211,11 @@
 								},
 								"dataset": {
 									"referenceName": "DS_ADLS_USER_CSV",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "columbus",
+										"directory": "FileCount"
+									}
 								},
 								"firstRowOnly": false
 							}
