@@ -53,7 +53,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DS_ADLS_USER",
+									"referenceName": "DS_ADLS_USER_BINARY",
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "columbus",
@@ -67,7 +67,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "DS_ADLS_USER",
+									"referenceName": "DS_ADLS_USER_BINARY",
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "columbus",

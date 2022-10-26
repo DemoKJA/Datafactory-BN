@@ -1,5 +1,5 @@
 {
-	"name": "DS_ADLS_USER",
+	"name": "DS_ADLS_USER_BINARY",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_ADLS_USER",

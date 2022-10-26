@@ -1,0 +1,21 @@
+{
+	"name": "DS_ADLS_USER_CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_USER",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
