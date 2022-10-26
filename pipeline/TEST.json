@@ -12,6 +12,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"TEST": {
+				"type": "string",
+				"defaultValue": "ok"
+			}
+		},
 		"annotations": []
 	}
 }
