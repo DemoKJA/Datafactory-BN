@@ -137,7 +137,7 @@
 							}
 						},
 						{
-							"name": "Increment j",
+							"name": "Increment i",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -161,7 +161,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Increment j",
+									"activity": "Increment i",
 									"dependencyConditions": [
 										"Succeeded"
 									]
