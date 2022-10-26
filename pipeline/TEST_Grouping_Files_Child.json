@@ -56,7 +56,7 @@
 									"referenceName": "DS_ADLS_USER_BINARY",
 									"type": "DatasetReference",
 									"parameters": {
-										"container": "columbus",
+										"container": "@pipeline().parameters.ContainerName",
 										"directory": "TESTGrouping",
 										"filename": {
 											"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
@@ -70,7 +70,7 @@
 									"referenceName": "DS_ADLS_USER_BINARY",
 									"type": "DatasetReference",
 									"parameters": {
-										"container": "columbus",
+										"container": "@pipeline().parameters.ContainerName",
 										"directory": {
 											"value": "@concat('TESTGrouping/Group',pipeline().parameters.FolderNumber)",
 											"type": "Expression"
@@ -187,7 +187,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://stdataaiuserdev.blob.core.windows.net/columbus/FileCount/FileCount.csv?resource=file",
+					"url": "https://stdataaiuserdev.blob.core.windows.net/@pipeline().parameters.ContainerName/FileCount/FileCount.csv?resource=file",
 					"method": "PUT",
 					"headers": {
 						"x-ms-version": "2019-07-07",
