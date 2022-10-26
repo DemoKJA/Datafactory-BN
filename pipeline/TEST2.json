@@ -12,7 +12,10 @@
 						"referenceName": "TEST",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"TEST": "sure"
+					}
 				}
 			}
 		],
