@@ -19,8 +19,7 @@
 						"referenceName": "DS_ADLS_USER",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "anchorage",
-							"directory": "VideoRaw"
+							"container": "anchorage"
 						}
 					},
 					"fieldList": [
