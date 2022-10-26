@@ -231,7 +231,7 @@
 			"TotalFileCount": {
 				"type": "string"
 			},
-			"@pipeline().parameters.ContainerName": {
+			"ContainerName": {
 				"type": "string"
 			}
 		},
