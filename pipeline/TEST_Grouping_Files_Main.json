@@ -108,12 +108,12 @@
 										"value": "@variables('FileCountIncremental')",
 										"type": "Expression"
 									},
-									"FileCountRemaining": {
-										"value": "@variables('FileCountRemaining')",
-										"type": "Expression"
-									},
 									"TotalFileCount": {
 										"value": "@variables('TotalFileCount')",
+										"type": "Expression"
+									},
+									"ContainerName": {
+										"value": "@pipeline().parameters.ContainerName",
 										"type": "Expression"
 									}
 								}
