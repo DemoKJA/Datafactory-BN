@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Delete FileCountFile",
+				"name": "Delete FileCount file",
 				"type": "Delete",
 				"dependsOn": [],
 				"policy": {
