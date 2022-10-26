@@ -53,6 +53,10 @@
 										"directoy": {
 											"value": "@concat('TESTGrouping/Group',variables('FolderNumber'))",
 											"type": "Expression"
+										},
+										"filename": {
+											"value": "@pipeline().parameters.filename",
+											"type": "Expression"
 										}
 									}
 								}
@@ -60,7 +64,18 @@
 							"outputs": [
 								{
 									"referenceName": "DS_ADLS_USER",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "columbus",
+										"directoy": {
+											"value": "@concat('TESTGrouping/Group',variables('FolderNumber'))",
+											"type": "Expression"
+										},
+										"filename": {
+											"value": "@pipeline().parameters.filename",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
@@ -69,6 +84,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"FileCount": {
 				"type": "String",
