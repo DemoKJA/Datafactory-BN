@@ -261,8 +261,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "columbus",
-							"directory": "FileCount",
-							"file": "FileCount.csv"
+							"directory": "FileCount"
 						}
 					},
 					"enableLogging": true,
