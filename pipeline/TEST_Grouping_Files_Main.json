@@ -58,7 +58,7 @@
 				}
 			},
 			{
-				"name": "Set variable2",
+				"name": "Set TotalFileCount",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
