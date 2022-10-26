@@ -252,7 +252,8 @@
 				"type": "String"
 			},
 			"j": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "1"
 			}
 		},
 		"annotations": []
