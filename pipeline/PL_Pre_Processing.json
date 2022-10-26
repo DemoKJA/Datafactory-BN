@@ -22,7 +22,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Cleanse files",
+							"name": "Cleanse file names",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
