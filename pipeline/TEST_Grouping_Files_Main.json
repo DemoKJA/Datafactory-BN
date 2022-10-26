@@ -72,7 +72,7 @@
 				"typeProperties": {
 					"variableName": "test",
 					"value": {
-						"value": "@length(json(variables('ContainerFileArrayLength')).value)",
+						"value": "@string(length(variables('ContainerFileArrayLength')))",
 						"type": "Expression"
 					}
 				}
@@ -88,7 +88,7 @@
 				"defaultValue": "1"
 			},
 			"ContainerFileArrayLength": {
-				"type": "Array"
+				"type": "String"
 			},
 			"GISFolderName": {
 				"type": "String",
