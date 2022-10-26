@@ -1,0 +1,10 @@
+{
+	"name": "LS_ADLS_ARCHIVE",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://stdataaiarchivedev.dfs.core.windows.net"
+		}
+	}
+}
