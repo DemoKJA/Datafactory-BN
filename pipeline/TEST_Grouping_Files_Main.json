@@ -1,5 +1,5 @@
 {
-	"name": "TEST_Grouping_Files",
+	"name": "TEST_Grouping_Files_Main",
 	"properties": {
 		"activities": [
 			{
@@ -38,37 +38,58 @@
 				}
 			},
 			{
-				"name": "Set variable1",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get list of file from container",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"name": "Until 20 per file",
+				"type": "Until",
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "TESTVar",
-					"value": {
-						"value": "@activity('Get list of file from container').output.childItems",
+					"expression": {
+						"value": "@greaterOrEquals(variables('FileCount'),20)",
 						"type": "Expression"
-					}
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"enableStaging": false
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
 				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
 		"variables": {
 			"FileCount": {
 				"type": "String",
-				"defaultValue": "0"
+				"defaultValue": "1"
 			},
 			"FolderNumber": {
 				"type": "String",
 				"defaultValue": "1"
 			},
 			"TESTVar": {
-				"type": "Array"
+				"type": "String"
+			},
+			"GISFolderName": {
+				"type": "String",
+				"defaultValue": "JustATest"
 			}
 		},
 		"annotations": []
