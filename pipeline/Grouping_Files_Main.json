@@ -1,5 +1,5 @@
 {
-	"name": "TEST_Grouping_Files_Main",
+	"name": "Grouping_Files_Main",
 	"properties": {
 		"activities": [
 			{
@@ -91,7 +91,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "TEST_Grouping_Files_Child",
+									"referenceName": "Grouping_Files_Child",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true,
