@@ -36,10 +36,38 @@
 						"type": "BinaryReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get list of file from container",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TESTVar",
+					"value": {
+						"value": "@activity('Get list of file from container').output.childitems",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
 			"FileCount": {
+				"type": "String",
+				"defaultValue": "0"
+			},
+			"FolderNumber": {
+				"type": "String",
+				"defaultValue": "1"
+			},
+			"TESTVar": {
 				"type": "String",
 				"defaultValue": "0"
 			}
