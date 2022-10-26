@@ -3,13 +3,13 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Until 20 per file",
+				"name": "Until 5 per file",
 				"type": "Until",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greaterOrEquals(variables('FileCount'),20)",
+						"value": "@greaterOrEquals(variables('FileCount'),5)",
 						"type": "Expression"
 					},
 					"activities": [
