@@ -68,8 +68,7 @@
 				"defaultValue": "1"
 			},
 			"TESTVar": {
-				"type": "String",
-				"defaultValue": "0"
+				"type": "Array"
 			}
 		},
 		"annotations": []
