@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greater(variables('FileCount'),20)",
+						"value": "@greater(int(variables('FileNumber')),20)",
 						"type": "Expression"
 					},
 					"activities": [
@@ -135,7 +135,8 @@
 				"defaultValue": "1"
 			},
 			"FileNumber": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "1"
 			}
 		},
 		"annotations": []
