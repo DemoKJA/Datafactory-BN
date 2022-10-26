@@ -200,6 +200,9 @@
 			"FileNumber": {
 				"type": "String",
 				"defaultValue": "1"
+			},
+			"FileCountIncremental": {
+				"type": "String"
 			}
 		},
 		"annotations": []
