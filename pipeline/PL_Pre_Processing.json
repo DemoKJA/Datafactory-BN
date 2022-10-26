@@ -20,7 +20,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "anchorage",
-							"directory": "*",
+							"directory": "VideoRaw",
 							"filename": "*"
 						}
 					},
