@@ -173,6 +173,46 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "Increment j",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Execute Child",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "i",
+								"value": {
+									"value": "@string(add(int(variables('FolderNumber')),1))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "set FolderNumber",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Increment j",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileCountIncremental",
+								"value": {
+									"value": "@variables('j')",
+									"type": "Expression"
+								}
+							}
 						}
 					],
 					"timeout": "0.12:00:00"
@@ -195,6 +235,14 @@
 				"defaultValue": "JustATest"
 			},
 			"i": {
+				"type": "String",
+				"defaultValue": "1"
+			},
+			"FolderNumber": {
+				"type": "String",
+				"defaultValue": "1"
+			},
+			"j": {
 				"type": "String",
 				"defaultValue": "1"
 			}
