@@ -3,19 +3,93 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
-				}
+					"source": {
+						"type": "DelimitedTextSource",
+						"additionalColumns": [
+							{
+								"name": "Count",
+								"value": {
+									"value": "@variables('TEST')",
+									"type": "Expression"
+								}
+							}
+						],
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Count",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Count"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_ADLS_USER_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "na",
+							"directory": "na",
+							"file": "na"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_ADLS_USER_CSV",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
-		"parameters": {
+		"variables": {
 			"TEST": {
-				"type": "string",
-				"defaultValue": "ok"
+				"type": "String",
+				"defaultValue": "10"
 			}
 		},
 		"annotations": []
