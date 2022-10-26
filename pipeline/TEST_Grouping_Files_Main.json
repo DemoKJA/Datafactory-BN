@@ -82,6 +82,10 @@
 			"TotalFileCount": {
 				"type": "String"
 			},
+			"FileCountIncremental": {
+				"type": "String",
+				"defaultValue": "1"
+			},
 			"FolderNumber": {
 				"type": "String",
 				"defaultValue": "1"
@@ -92,10 +96,6 @@
 			"GISFolderName": {
 				"type": "String",
 				"defaultValue": "JustATest"
-			},
-			"FileCountIncremental": {
-				"type": "String",
-				"defaultValue": "1"
 			}
 		},
 		"annotations": []
