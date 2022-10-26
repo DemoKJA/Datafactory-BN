@@ -3,18 +3,18 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Until 5 per file",
-				"type": "Until",
+				"name": "If FileCount above than 5",
+				"type": "IfCondition",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greaterOrEquals(variables('FileCount'),5)",
+						"value": "@greater(variables('FileCount'),6)",
 						"type": "Expression"
 					},
-					"activities": [
+					"ifTrueActivities": [
 						{
-							"name": "Copy data to folder",
+							"name": "Copy into fodler true",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -79,8 +79,7 @@
 								}
 							]
 						}
-					],
-					"timeout": "0.12:00:00"
+					]
 				}
 			}
 		],
