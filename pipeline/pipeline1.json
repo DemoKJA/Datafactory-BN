@@ -19,7 +19,9 @@
 						"referenceName": "DS_ADLS_USER",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "anchorage"
+							"container": "anchorage",
+							"directory": "*",
+							"filename": "*"
 						}
 					},
 					"fieldList": [

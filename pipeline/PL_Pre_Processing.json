@@ -35,7 +35,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach Child Item",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -45,7 +45,66 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get list of file from container').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Cleanse files",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "BinarySource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "BinaryReadSettings"
+									}
+								},
+								"sink": {
+									"type": "BinarySink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_ADLS_USER",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "anchorage"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ADLS_USER",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "anchorage"
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"annotations": []
