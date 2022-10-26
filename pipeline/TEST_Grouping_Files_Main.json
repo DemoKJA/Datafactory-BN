@@ -104,6 +104,10 @@
 									"FileCountIncremental": {
 										"value": "@variables('FileCountIncremental')",
 										"type": "Expression"
+									},
+									"FileCountRemaining": {
+										"value": "@variables('FileCountRemaining')",
+										"type": "Expression"
 									}
 								}
 							}
