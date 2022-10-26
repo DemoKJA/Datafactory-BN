@@ -29,6 +29,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "NOTHING",
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -74,7 +76,7 @@
 						"parameters": {
 							"container": "na",
 							"directory": "na",
-							"file": "na"
+							"file": "*.txt"
 						}
 					}
 				],
