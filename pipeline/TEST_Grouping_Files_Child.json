@@ -156,7 +156,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "FileNumber",
+								"variableName": "FileCountIncremental",
 								"value": {
 									"value": "@variables('j')",
 									"type": "Expression"
