@@ -228,9 +228,6 @@
 			"FileCountIncremental": {
 				"type": "string"
 			},
-			"FileCountRemaining": {
-				"type": "string"
-			},
 			"TotalFileCount": {
 				"type": "string"
 			},
