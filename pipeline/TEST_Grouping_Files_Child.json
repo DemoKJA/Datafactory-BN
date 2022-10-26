@@ -90,7 +90,10 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "i",
-								"value": ""
+								"value": {
+									"value": "@string(add(int(variables('FolderNumber')),20))",
+									"type": "Expression"
+								}
 							}
 						},
 						{
