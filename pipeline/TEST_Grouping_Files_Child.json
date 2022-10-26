@@ -97,7 +97,7 @@
 							}
 						},
 						{
-							"name": "Set FolderNumber",
+							"name": "Set FileNumber",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -109,7 +109,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "FolderNumber",
+								"variableName": "FileNumber",
 								"value": {
 									"value": "@variables('i')",
 									"type": "Expression"
