@@ -7,7 +7,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Remove base file",
+						"activity": "Filter out base file",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Remove base file').output.value",
+						"value": "@activity('Filter out base file').output.value",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -120,7 +120,7 @@
 				}
 			},
 			{
-				"name": "Remove base file",
+				"name": "Filter out base file",
 				"type": "Filter",
 				"dependsOn": [
 					{
