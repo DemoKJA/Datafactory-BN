@@ -1,0 +1,328 @@
+{
+	"name": "Grouping_Files_Main",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get list of file from container",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_ADLS_USER_BINARY",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": {
+								"value": "@pipeline().parameters.ContainerName",
+								"type": "Expression"
+							},
+							"directory": "TESTGrouping",
+							"filename": "*"
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Set TotalFileCount",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get list of file from container",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Delete FileCount file pre",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "TotalFileCount",
+					"value": {
+						"value": "@string(length(activity('Get list of file from container').output.childItems))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Until run out of files in container",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set TotalFileCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(add(int(variables('FileCountIncremental')),1), int(variables('TotalFileCount')))\n\n\n",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Execute Grouping Child",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Grouping_Files_Child",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"ContainerFileArray": {
+										"value": "@activity('Get list of file from container').output.childItems",
+										"type": "Expression"
+									},
+									"FolderNumber": {
+										"value": "@variables('FolderNumber')",
+										"type": "Expression"
+									},
+									"FileCountIncremental": {
+										"value": "@variables('FileCountIncremental')",
+										"type": "Expression"
+									},
+									"TotalFileCount": {
+										"value": "@variables('TotalFileCount')",
+										"type": "Expression"
+									},
+									"ContainerName": {
+										"value": "@pipeline().parameters.ContainerName",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "set FileCountIncremental",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Pull FileCountIncremental",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileCountIncremental",
+								"value": {
+									"value": "@activity('Pull FileCountIncremental').output.value[0].Prop_0",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Increment i",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Execute Grouping Child",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "i",
+								"value": {
+									"value": "@string(add(int(variables('FolderNumber')),1))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "set FolderNumber",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Increment i",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FolderNumber",
+								"value": {
+									"value": "@variables('i')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Pull FileCountIncremental",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Execute Grouping Child",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFolderPath": "FileCount",
+										"wildcardFileName": "*",
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"dataset": {
+									"referenceName": "DS_ADLS_USER_CSV",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "@pipeline().parameters.ContainerName",
+										"directory": "FileCount"
+									}
+								},
+								"firstRowOnly": false
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "Delete FileCount file post",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Until run out of files in container",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_ADLS_USER_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "@pipeline().parameters.ContainerName",
+							"directory": "FileCount"
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
+			},
+			{
+				"name": "Delete FileCount file pre",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_ADLS_USER_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": {
+								"value": "@pipeline().parameters.ContainerName",
+								"type": "Expression"
+							},
+							"directory": "FileCount"
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
+			}
+		],
+		"parameters": {
+			"ContainerName": {
+				"type": "string",
+				"defaultValue": "columbus"
+			}
+		},
+		"variables": {
+			"TotalFileCount": {
+				"type": "String"
+			},
+			"FileCountIncremental": {
+				"type": "String",
+				"defaultValue": "0"
+			},
+			"GISFolderName": {
+				"type": "String",
+				"defaultValue": "JustATest"
+			},
+			"i": {
+				"type": "String",
+				"defaultValue": "1"
+			},
+			"FolderNumber": {
+				"type": "String",
+				"defaultValue": "1"
+			}
+		},
+		"annotations": []
+	}
+}

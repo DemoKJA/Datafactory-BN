@@ -1,0 +1,260 @@
+{
+	"name": "Grouping_Files_Child",
+	"properties": {
+		"activities": [
+			{
+				"name": "Until Folder is full",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Initialize FileCountIncremental",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@or(greater(int(variables('FileNumber')),3),greater(add(int(variables('FileCountIncremental')),1),int(pipeline().parameters.TotalFileCount)))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy into folder",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "BinarySource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "BinaryReadSettings"
+									}
+								},
+								"sink": {
+									"type": "BinarySink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_ADLS_USER_BINARY",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "@pipeline().parameters.ContainerName",
+										"directory": "TESTGrouping",
+										"filename": {
+											"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ADLS_USER_BINARY",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "@pipeline().parameters.ContainerName",
+										"directory": {
+											"value": "@concat('TESTGrouping/Group',pipeline().parameters.FolderNumber)",
+											"type": "Expression"
+										},
+										"filename": {
+											"value": "@pipeline().parameters.ContainerFileArray[int(variables('FileCountIncremental'))].name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Set i",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Copy into folder",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "i",
+								"value": {
+									"value": "@string(add(int(variables('FileNumber')),1))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set FileNumber",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set i",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileNumber",
+								"value": {
+									"value": "@variables('i')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set j",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Copy into folder",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "j",
+								"value": {
+									"value": "@string(add(int(variables('FileCountIncremental')),1))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set FileCountIncremental",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set j",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileCountIncremental",
+								"value": {
+									"value": "@variables('j')",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "Write Count To Storage",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Until Folder is full",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@replace('https://stdataaiuserdev.blob.core.windows.net/CONTAINER_NAME/FileCount/FileCount.csv?resource=file','CONTAINER_NAME',pipeline().parameters.ContainerName)",
+						"type": "Expression"
+					},
+					"method": "PUT",
+					"headers": {
+						"x-ms-version": "2019-07-07",
+						"x-ms-blob-type": "BlockBlob",
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"value": "@variables('FileCountIncremental')",
+						"type": "Expression"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://storage.azure.com"
+					}
+				}
+			},
+			{
+				"name": "Initialize FileCountIncremental",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileCountIncremental",
+					"value": {
+						"value": "@pipeline().parameters.FileCountIncremental",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"ContainerFileArray": {
+				"type": "array"
+			},
+			"FolderNumber": {
+				"type": "string"
+			},
+			"FileCountIncremental": {
+				"type": "string"
+			},
+			"TotalFileCount": {
+				"type": "string"
+			},
+			"ContainerName": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"i": {
+				"type": "String",
+				"defaultValue": "1"
+			},
+			"FileNumber": {
+				"type": "String",
+				"defaultValue": "1"
+			},
+			"FileCountIncremental": {
+				"type": "String"
+			},
+			"j": {
+				"type": "String",
+				"defaultValue": "1"
+			}
+		},
+		"annotations": []
+	}
+}
