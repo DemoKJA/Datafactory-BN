@@ -5,7 +5,14 @@
 			{
 				"name": "Until Folder is full",
 				"type": "Until",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Initialize FileNumber",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
@@ -118,6 +125,19 @@
 						}
 					],
 					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "Initialize FileNumber",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileNumber",
+					"value": {
+						"value": "@pipeline().parameters.FileCountIncremental",
+						"type": "Expression"
+					}
 				}
 			}
 		],
