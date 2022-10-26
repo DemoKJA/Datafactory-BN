@@ -171,7 +171,7 @@
 							"typeProperties": {
 								"variableName": "FolderNumber",
 								"value": {
-									"value": "@variables('j')",
+									"value": "@variables('i')",
 									"type": "Expression"
 								}
 							}
