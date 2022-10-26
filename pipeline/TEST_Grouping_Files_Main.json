@@ -129,7 +129,7 @@
 							}
 						},
 						{
-							"name": "Increment FileCount",
+							"name": "Increment i",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -141,8 +141,31 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
+								"variableName": "i",
+								"value": {
+									"value": "@string(add(variables('FileCountIncremental'),20))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "set FileCountIncremental",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Increment i",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
 								"variableName": "FileCountIncremental",
-								"value": ""
+								"value": {
+									"value": "@variables('i')",
+									"type": "Expression"
+								}
 							}
 						}
 					],
