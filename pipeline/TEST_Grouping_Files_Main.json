@@ -98,7 +98,7 @@
 				}
 			},
 			{
-				"name": "Until1",
+				"name": "Until run out of files in container",
 				"type": "Until",
 				"dependsOn": [
 					{
@@ -114,71 +114,23 @@
 						"value": "@greater(variables('FileCountIncremental'),variables('TotalFileCount'))",
 						"type": "Expression"
 					},
+					"activities": [
+						{
+							"name": "Execute Child",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "TEST_Grouping_Files_Child",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true
+							}
+						}
+					],
 					"timeout": "0.12:00:00"
 				}
-			},
-			{
-				"name": "Copy into fodler true",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "BinarySource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true
-						},
-						"formatSettings": {
-							"type": "BinaryReadSettings"
-						}
-					},
-					"sink": {
-						"type": "BinarySink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						}
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "DS_ADLS_USER",
-						"type": "DatasetReference",
-						"parameters": {
-							"container": "columbus",
-							"directoy": "TESTGrouping",
-							"filename": {
-								"value": "@pipeline().parameters.filename",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "DS_ADLS_USER",
-						"type": "DatasetReference",
-						"parameters": {
-							"container": "columbus",
-							"directoy": {
-								"value": "@concat('TESTGrouping/Group',variables('FolderNumber'))",
-								"type": "Expression"
-							},
-							"filename": {
-								"value": "@pipeline().parameters.filename",
-								"type": "Expression"
-							}
-						}
-					}
-				]
 			}
 		],
 		"variables": {
