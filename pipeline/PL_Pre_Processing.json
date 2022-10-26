@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get list of file from container').output.childItems",
+						"value": "@activity('Remove base file').output.value",
 						"type": "Expression"
 					},
 					"isSequential": true,
