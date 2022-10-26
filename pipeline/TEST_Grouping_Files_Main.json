@@ -185,10 +185,6 @@
 				"type": "String",
 				"defaultValue": "1"
 			},
-			"FolderNumber": {
-				"type": "String",
-				"defaultValue": "1"
-			},
 			"ContainerFileArray": {
 				"type": "Array"
 			},
