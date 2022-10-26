@@ -169,7 +169,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "i",
+								"variableName": "FolderNumber",
 								"value": {
 									"value": "@variables('j')",
 									"type": "Expression"
