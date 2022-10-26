@@ -70,9 +70,9 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "FileCountIncremental",
+					"variableName": "TotalFileCount",
 					"value": {
-						"value": "@string(length(variables('ContainerFileArrayLength')))",
+						"value": "@string(length(variables('ContainerFileArray')))",
 						"type": "Expression"
 					}
 				}
