@@ -85,7 +85,7 @@
 					},
 					"activities": [
 						{
-							"name": "Execute Child",
+							"name": "Execute Grouping Child",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"userProperties": [],
@@ -144,7 +144,7 @@
 							"type": "SetVariable",
 							"dependsOn": [
 								{
-									"activity": "Execute Child",
+									"activity": "Execute Grouping Child",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -184,7 +184,7 @@
 							"type": "Lookup",
 							"dependsOn": [
 								{
-									"activity": "Execute Child",
+									"activity": "Execute Grouping Child",
 									"dependencyConditions": [
 										"Succeeded"
 									]
