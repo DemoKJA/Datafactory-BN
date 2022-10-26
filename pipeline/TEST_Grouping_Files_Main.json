@@ -38,8 +38,8 @@
 				}
 			},
 			{
-				"name": "ForEach file assign to folder",
-				"type": "ForEach",
+				"name": "Set variable1",
+				"type": "SetVariable",
 				"dependsOn": [
 					{
 						"activity": "Get list of file from container",
@@ -50,32 +50,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"items": {
+					"variableName": "ContainerFileArrayLength",
+					"value": {
 						"value": "@activity('Get list of file from container').output.childItems",
 						"type": "Expression"
-					},
-					"isSequential": true,
-					"activities": [
-						{
-							"name": "Execute Pipeline child",
-							"type": "ExecutePipeline",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"pipeline": {
-									"referenceName": "TEST_Grouping_Files_Child",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"filename": {
-										"value": "@item()",
-										"type": "Expression"
-									}
-								}
-							}
-						}
-					]
+					}
 				}
 			}
 		],
@@ -88,8 +67,8 @@
 				"type": "String",
 				"defaultValue": "1"
 			},
-			"TESTVar": {
-				"type": "String"
+			"ContainerFileArrayLength": {
+				"type": "Array"
 			},
 			"GISFolderName": {
 				"type": "String",
