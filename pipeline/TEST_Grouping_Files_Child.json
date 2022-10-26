@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@or(greater(int(variables('FileNumber')),20),greater(variables('FileCountIncremental'),variables('TotalFileCount')))",
+						"value": "@or(greater(int(variables('FileNumber')),20),greater(int(variables('FileCountIncremental')),int(variables('TotalFileCount'))))",
 						"type": "Expression"
 					},
 					"activities": [
