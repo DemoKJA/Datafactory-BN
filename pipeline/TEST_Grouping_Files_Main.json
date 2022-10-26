@@ -298,7 +298,8 @@
 		],
 		"parameters": {
 			"ContainerName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "columbus"
 			}
 		},
 		"variables": {
