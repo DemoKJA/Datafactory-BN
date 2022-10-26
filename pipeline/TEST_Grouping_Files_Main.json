@@ -76,6 +76,26 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set FileName",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set TotalFileCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileName",
+					"value": {
+						"value": "@string(variables('ContainerFileArray')[0].value.name)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -96,6 +116,9 @@
 			"GISFolderName": {
 				"type": "String",
 				"defaultValue": "JustATest"
+			},
+			"FileName": {
+				"type": "String"
 			}
 		},
 		"annotations": []
