@@ -175,7 +175,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "",
+								"variableName": "i",
 								"value": {
 									"value": "@variables('j')",
 									"type": "Expression"
