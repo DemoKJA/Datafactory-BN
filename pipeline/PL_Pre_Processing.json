@@ -54,22 +54,22 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DS_ADLS_USER_CLEANSED",
+									"referenceName": "DS_ADLS_USER",
 									"type": "DatasetReference",
 									"parameters": {
-										"container": "anchorage",
-										"directory": "*",
+										"container": "columbus",
+										"directoy": "RawVideoFiles",
 										"filename": "*"
 									}
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "DS_ADLS_USER_CLEANSED",
+									"referenceName": "DS_ADLS_USER",
 									"type": "DatasetReference",
 									"parameters": {
-										"container": "anchorage",
-										"directory": "CleansedRawVideo",
+										"container": "columbus",
+										"directoy": "CleansedNameVideoFile",
 										"filename": {
 											"value": "@replace(item().name,'-','')",
 											"type": "Expression"
