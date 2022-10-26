@@ -233,6 +233,9 @@
 			},
 			"TotalFileCount": {
 				"type": "string"
+			},
+			"@pipeline().parameters.ContainerName": {
+				"type": "string"
 			}
 		},
 		"variables": {
