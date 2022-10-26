@@ -16,12 +16,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "DS_ADLS_USER_CLEANSED",
+						"referenceName": "DS_ADLS_USER",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "anchorage",
-							"directory": "*",
-							"filename": "*"
+							"container": "anchorage"
 						}
 					},
 					"fieldList": [
