@@ -38,31 +38,11 @@
 				}
 			},
 			{
-				"name": "Set ContainerFileArray",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get list of file from container",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "ContainerFileArray",
-					"value": {
-						"value": "@activity('Get list of file from container').output.childItems",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Set TotalFileCount",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Set ContainerFileArray",
+						"activity": "Get list of file from container",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -114,7 +94,7 @@
 								"waitOnCompletion": true,
 								"parameters": {
 									"ContainerFileArray": {
-										"value": "@variables('ContainerFileArray')",
+										"value": "@activity('Get list of file from container').output.childItems",
 										"type": "Expression"
 									},
 									"FolderNumber": {
@@ -217,7 +197,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Set ContainerFileArray",
+						"activity": "Get list of file from container",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -240,9 +220,6 @@
 			"FileCountIncremental": {
 				"type": "String",
 				"defaultValue": "1"
-			},
-			"ContainerFileArray": {
-				"type": "Array"
 			},
 			"GISFolderName": {
 				"type": "String",
