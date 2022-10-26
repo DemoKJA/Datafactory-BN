@@ -235,6 +235,43 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Delete FileCount file",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Until run out of files in container",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_ADLS_USER_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "columbus",
+							"directory": "FileCount",
+							"file": "FileCount.csv"
+						}
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
 			}
 		],
 		"variables": {
