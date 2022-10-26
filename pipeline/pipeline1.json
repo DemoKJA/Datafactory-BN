@@ -19,7 +19,9 @@
 						"referenceName": "DS_ADLS_USER",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "anchorage"
+							"container": "columbus",
+							"directoy": "RawVideoFiles",
+							"filename": "*"
 						}
 					},
 					"fieldList": [
@@ -27,6 +29,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
