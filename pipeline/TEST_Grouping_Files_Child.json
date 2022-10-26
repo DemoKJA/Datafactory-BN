@@ -8,6 +8,10 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
+					"expression": {
+						"value": "@greater(variables('FileCount'),20)",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "Copy into folder",
