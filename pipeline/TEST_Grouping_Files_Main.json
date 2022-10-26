@@ -134,6 +134,10 @@
 									"FolderNumber": {
 										"value": "@variables('FolderNumber')",
 										"type": "Expression"
+									},
+									"FileCountIncremental": {
+										"value": "@variables('FileCountIncremental')",
+										"type": "Expression"
 									}
 								}
 							}
